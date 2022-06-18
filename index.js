@@ -11,6 +11,9 @@ app.use(express.json());
 // Content-Type が application/x-www-form-urlencoded である POST リクエストのボディ部を解析し、 リクエストオブジェクトの body プロパティにフォームデータの内容を表すオブジェクトをセット
 app.use(bodyParser.urlencoded({extended: true}));
 
+const postRouter = require("./routes/Posts");
+app.use("/posts", postRouter);
+
 db.sequelize.sync().then(() => {
     app.listen(3001, ()=> {
         console.log("running on port 3001");
