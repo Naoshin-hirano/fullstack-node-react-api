@@ -14,6 +14,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 const postRouter = require("./routes/Posts");
 app.use("/posts", postRouter);
 
+const commentsRouter = require("./routes/Comments");
+app.use("/comments", commentsRouter);
+
 db.sequelize.sync().then(() => {
     app.listen(3001, ()=> {
         console.log("running on port 3001");

@@ -14,5 +14,13 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 
+    Posts.associate = (models) => {
+        // 1:多 のテーブル関係
+        Posts.hasMany(models.Comments, {
+            // post(1)を削除したらそのコメントも全て削除される
+            onDelete: "cascade",
+        });
+    }
+
     return Posts;
 };
