@@ -3,6 +3,8 @@ const router = express.Router();
 const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 
+const { sign } = require("jsonwebtoken");
+
 // Registration
 router.post("/", async (req, res) => {
     const { username, password } = req.body;
@@ -23,8 +25,13 @@ router.post("/login", async (req, res) => {
     
     bcrypt.compare(password, user.password).then((match) => {
         if (!match) res.json({ error: "UsernameとPasswordが合致しません" });
-
-        res.json("ログイン成功しました");
+        // "importantsecret"という秘密鍵でJWTを発行
+        const accessToken = sign(
+            { username: username, password: password },
+            "importantsecret"
+        );
+        // フロントのstorageに保存
+        res.json(accessToken);
     });
 });
 
