@@ -13,7 +13,11 @@ router.get("/:postId", async (req, res) => {
 // validationをパスしたらcomment追加処理実行
 router.post("/", validation, async (req, res) => {
     const comment = req.body;
+    // validationミドルウェアでログイン後にtokenを復号したusernameとpasswordをreq.userに代入したobjectを使う
+    const username = req.user.username;
     // INSERT INTO Comments (commentBody, PostId) VALUES (?, ?)
+    // Commentsカラムのusernameへ代入
+    comment.username = username;
     await Comments.create(comment);
     res.json(comment);
 });

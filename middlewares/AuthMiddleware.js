@@ -10,6 +10,8 @@ const validation = (req, res, next) => {
     try {
         // accessTokenを"importantsecret"という秘密鍵で復号
         const validToken = verify(accessToken, "importantsecret");
+        // 復号したtoken(usernameとpassword)をreq.userオブジェクトに代入
+        req.user = validToken;
         if (validToken) {
             return next();
         }
