@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Users } = require("../models");
 const bcrypt = require("bcrypt");
-
+const { validation } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
 
 // Registration
@@ -33,6 +33,11 @@ router.post("/login", async (req, res) => {
         // フロントのstorageに保存
         res.json(accessToken);
     });
+});
+
+// useEffectでログインできているかの確認
+router.get("/auth", validation, (req, res) => {
+    res.json(req.user);
 });
 
 module.exports = router;
