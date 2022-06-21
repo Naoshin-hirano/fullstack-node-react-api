@@ -30,8 +30,8 @@ router.post("/login", async (req, res) => {
             { username: username, password: password },
             "importantsecret"
         );
-        // フロントのstorageに保存
-        res.json(accessToken);
+        // フロントのstorageにtoken保存
+        res.json({ token: accessToken, username: username, id: user.id });
     });
 });
 
