@@ -22,4 +22,17 @@ router.post("/", validation, async (req, res) => {
     res.json(comment);
 });
 
+router.delete("/:commentId", validation, async (req, res) => {
+    const commentdId = req.params.commentId;
+    // DELETE FROM Comments WHERE id=?;
+    await Comments.destroy({
+        where: {
+            id: commentdId
+        }
+    });
+
+    // フロント側で.then()内の処理を実行するためにどうでもいい内容のレスポンスをあえて作ってる
+    res.json("DELETE SUCCESSFULLY");
+});
+
 module.exports = router;
