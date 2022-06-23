@@ -27,7 +27,7 @@ router.post("/login", async (req, res) => {
         if (!match) res.json({ error: "UsernameとPasswordが合致しません" });
         // "importantsecret"という秘密鍵でJWTを発行
         const accessToken = sign(
-            { username: username, password: password },
+            { username: username, password: password, id: user.id },
             "importantsecret"
         );
         // フロントのstorageにtoken保存

@@ -9,15 +9,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
     });
-    // Postsを表示させるために一時的にコメントアウト
-    // Users.associate = (models) => {
-    //     // 1:多 のテーブル関係
-    //     // Postsテーブルに自動的にusernameカラムが追加される
-    //     Users.hasMany(models.Posts, {
-    //         // post(1)を削除したらそのコメントも全て削除される
-    //         onDelete: "cascade",
-    //     });
-    // }
+
+    Users.associate = (models) => {
+        Users.hasMany(models.Likes, {
+            onDelete: "cascade",
+        });
+    }
 
     return Users;
 };

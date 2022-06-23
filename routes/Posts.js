@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const {Posts} = require("../models");
+const {Posts, Likes} = require("../models");
 
 router.get("/", async (req, res) => {
     // SELECT * FROM Posts;
-    const listOfPosts = await Posts.findAll()
+    // Postsだけでなくその中のLikesオブジェクトの配列も取得
+    const listOfPosts = await Posts.findAll({ include: [Likes] });
     res.json(listOfPosts);
 });
 
