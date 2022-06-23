@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const {Posts, Likes} = require("../models");
+const { validation } = require("../middlewares/AuthMiddleware");
 
-router.get("/", async (req, res) => {
+router.get("/", validation, async (req, res) => {
     // SELECT * FROM Posts;
     // Postsだけでなくその中のLikesオブジェクトの配列も取得
     const listOfPosts = await Posts.findAll({ include: [Likes] });
-    res.json(listOfPosts);
+    // 自分がいいねしたPostだけを抜き出す
+    const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+    res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
 });
 
 router.get("/byId/:id", async (req, res) => {
