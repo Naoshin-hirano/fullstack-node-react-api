@@ -19,11 +19,26 @@ router.get("/byId/:id", async (req, res) => {
     res.json(post);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validation, async (req, res) => {
+    // title, postText
     const post = req.body;
+    post.username = req.user.username;
     // INSERT INTO Posts (title, postText, username) VALUES (?, ?, ?)
     await Posts.create(post);
     res.json(post);
+});
+
+router.delete("/:postId", validation, async (req, res) => {
+    const postId = req.params.postId;
+    // DELETE FROM Comments WHERE id=?;
+    await Posts.destroy({
+        where: {
+            id: postId
+        }
+    });
+
+    // フロント側で.then()内の処理を実行するためにどうでもいい内容のレスポンスをあえて作ってる
+    res.json("DELETE SUCCESSFULLY");
 });
 
 module.exports = router;
