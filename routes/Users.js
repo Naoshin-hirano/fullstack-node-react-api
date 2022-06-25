@@ -40,4 +40,14 @@ router.get("/auth", validation, (req, res) => {
     res.json(req.user);
 });
 
+router.get("/basicInfo/:id", async (req, res) => {
+    const id = req.params.id;
+    // Usersのpassword意外のカラムを取得
+    const basicInfo = await Users.findByPk(id, {
+        attributes: { exclude: ["password"] },
+    });
+
+    res.json(basicInfo);
+});
+
 module.exports = router;

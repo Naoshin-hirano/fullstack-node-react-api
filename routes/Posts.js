@@ -19,10 +19,18 @@ router.get("/byId/:id", async (req, res) => {
     res.json(post);
 });
 
+// Profile画面のUserが投稿したPost一覧
+router.get("/byuserId/:id", async (req, res) => {
+    const uid = req.params.id;
+    const listOfPosts = await Posts.findAll({ where: { UserId: uid }, include: [Likes] });
+    res.json(listOfPosts);
+});
+
 router.post("/", validation, async (req, res) => {
     // title, postText
     const post = req.body;
     post.username = req.user.username;
+    post.UserId = req.user.id;
     // INSERT INTO Posts (title, postText, username) VALUES (?, ?, ?)
     await Posts.create(post);
     res.json(post);
