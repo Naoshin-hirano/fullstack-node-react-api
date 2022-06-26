@@ -50,4 +50,19 @@ router.get("/basicInfo/:id", async (req, res) => {
     res.json(basicInfo);
 });
 
+router.put("/changepassword", validation, async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const user = await Users.findOne({ where: { username: req.user.username }});
+    // oldPasswordと指定UserのDBにあるpasswordを比較
+    bcrypt.compare(oldPassword, user.password).then(async (match) => {
+        if (!match) res.json({ error: "パスワードが間違ってます" });
+        // newPasswordをハッシュ化してUsersのパスワードへ更新
+        bcrypt.hash(newPassword, 10).then((hash) => {
+            // Users.updateの次の処理にUsersを使った処理ないのでasync/await不要
+            Users.update({password: hash }, {where: { username: req.user.username }});
+            res.json("SUCCESS");
+        });
+    });
+});
+
 module.exports = router;
