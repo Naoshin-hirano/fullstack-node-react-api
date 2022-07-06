@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Users } = require("../models");
+const { Users, Relationships } = require("../models");
 const bcrypt = require("bcryptjs");
 const { validation } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
@@ -42,12 +42,26 @@ router.get("/auth", validation, (req, res) => {
 
 router.get("/basicInfo/:id", async (req, res) => {
     const id = req.params.id;
-    // Usersのpassword意外のカラムを取得
+    // 画面Userのpassword意外のカラム
+    // 画面UserがフォローしているUser一覧
     const basicInfo = await Users.findByPk(id, {
         attributes: { exclude: ["password"] },
+        include: {
+            model: Relationships
+        }
     });
 
-    res.json(basicInfo);
+    // 画面のUserをフォローしているUser一覧
+    const followingUsers = await Users.findAll({
+        include: {
+            model: Relationships,
+            where: {
+                "followed": id
+            }
+        }
+    });
+
+    res.json({ basicInfo: basicInfo, following: followingUsers });
 });
 
 router.put("/changepassword", validation, async (req, res) => {
