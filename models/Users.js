@@ -18,6 +18,17 @@ module.exports = (sequelize, DataTypes) => {
         Users.hasMany(models.Posts, {
             onDelete: "cascade",
         });
+
+        Users.hasMany(models.Relationships, {
+            onDelete: "cascade",
+            foreignKey: 'followed'
+        });
+        
+        Users.hasMany(models.Relationships, {
+            onDelete: "cascade",
+            foreignKey: 'following'
+        });
+
     }
 
     return Users;
