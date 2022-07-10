@@ -27,6 +27,9 @@ app.use("/likes", likesRouter);
 const Relationships = require("./routes/Relationships");
 app.use("/relationships", Relationships);
 
+const Tags = require("./routes/Tags");
+app.use("/tags", Tags);
+
 db.sequelize.sync().then(() => {
     app.listen(process.env.PORT || 3001, ()=> {
         console.log("running on port 3001");
