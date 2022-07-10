@@ -22,8 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         });
         
         Posts.hasMany(models.Likes, {
-            // post(1)を削除したらそのコメントも全て削除される
+            // post(1)を削除したらそのLikesも全て削除される
             onDelete: "cascade",
+        });
+
+        Posts.belongsToMany(models.Tags, {
+            through: "PostTag"
         });
     }
 
