@@ -26,6 +26,26 @@ router.get("/byuserId/:id", async (req, res) => {
     res.json(listOfPosts);
 });
 
+// タグで絞り込んだPost一覧
+router.get("/byhashtag/:id", validation, async (req, res) => {
+    const posts = await Posts.findAll({ include: [Tags, Likes] })
+    const tagName = req.params.id;
+
+    // Post一覧をループして、その中のTag一覧をさらにループして、リクエストのあったtag_nameと一致する名前のTagを持つPost一覧を取得
+    const tagPosts = [];
+    for (let i = 0; i < posts.length; i++) {
+        for (let f = 0; f < posts[i].Tags.length; f++) {
+            if (posts[i].Tags[f].tag_name != tagName) continue;
+            tagPosts.push(posts[i]);
+        }
+    };
+
+    // 自分がいいねしたPostだけを抜き出す
+    const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+
+    res.json({tagPosts: tagPosts, likedPosts: likedPosts});
+});
+
 router.post("/", validation, async (req, res) => {
     // title, postText
     const data = req.body;
