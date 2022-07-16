@@ -1,6 +1,7 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const router = express.Router();
-const {Posts, Likes, Tags, PostTag} = require("../models");
+const { Posts, Likes, Tags, PostTag } = require("../models");
 const { validation } = require("../middlewares/AuthMiddleware");
 
 router.get("/", validation, async (req, res) => {
@@ -43,7 +44,27 @@ router.get("/byhashtag/:id", validation, async (req, res) => {
     // 自分がいいねしたPostだけを抜き出す
     const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
 
-    res.json({tagPosts: tagPosts, likedPosts: likedPosts});
+    res.json({ tagPosts: tagPosts, likedPosts: likedPosts });
+});
+
+// 検索ワードで絞り込んだPost一覧
+router.get("/search/:id", validation, async (req, res) => {
+    const keyword = req.params.id;
+    // 自分がいいねしたPostだけを抜き出す
+    const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+    // 検索ワードを含むPost一覧
+    const posts = await Posts.findAll({
+        where: {
+            [Op.or]: [
+                { title: { [Op.like]: `%${keyword}%` } },
+                { postText: { [Op.like]: `%${keyword}%` } },
+                { username: { [Op.like]: `%${keyword}%` } },
+            ]
+        },
+        include: [Likes, Tags]
+    });
+
+    res.json({ searchPosts: posts, likedPosts: likedPosts });
 });
 
 router.post("/", validation, async (req, res) => {
@@ -56,7 +77,7 @@ router.post("/", validation, async (req, res) => {
         username: req.user.username,
         UserId: req.user.id
     };
-    
+
     // 新規タグを追加した場合
     // 新規タグのtagNameが既存タグのtagNameと被っていないか
     const existTag = await Tags.findOne({ where: { tag_name: data.tagName } });
@@ -68,12 +89,12 @@ router.post("/", validation, async (req, res) => {
         // INSERT INTO PostTag (PostId, TagId) VALUES (?, ?)
         await PostTag.create({ PostId: insertPost.id, TagId: insertTag.id });
     } else {
-       return res.json({ error: "NewTag名がすでに存在しているタグ名です" });
+        return res.json({ error: "NewTag名がすでに存在しているタグ名です" });
     };
 
     // 既存タグをこの投稿に追加した場合
     if (tags.length > 0) {
-        tags.forEach( async (tag) => {
+        tags.forEach(async (tag) => {
             const foundPost = await Posts.findOne({ where: { title: data.title } });
             const foundTag = await Tags.findOne({ where: { tag_name: tag } });
             PostTag.create({ PostId: foundPost.id, TagId: foundTag.id });
@@ -86,14 +107,14 @@ router.post("/", validation, async (req, res) => {
 router.put("/title", validation, async (req, res) => {
     const { newTitle, id } = req.body;
     // UPDATE Posts SET title=newTitle WHERE id=id;
-    await Posts.update({ title: newTitle }, { where: { id: id }});
+    await Posts.update({ title: newTitle }, { where: { id: id } });
     res.json(newTitle);
 });
 
 router.put("/postText", validation, async (req, res) => {
     const { newPostText, id } = req.body;
     // UPDATE Posts SET title=newPostText WHERE id=id;
-    await Posts.update({ postText: newPostText }, { where: { id: id }});
+    await Posts.update({ postText: newPostText }, { where: { id: id } });
     res.json(newPostText);
 });
 
