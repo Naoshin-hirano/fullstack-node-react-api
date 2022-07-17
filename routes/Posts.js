@@ -67,6 +67,31 @@ router.get("/search/:id", validation, async (req, res) => {
     res.json({ searchPosts: posts, likedPosts: likedPosts });
 });
 
+// 検索窓でのオートサジェスト一覧
+router.get("/suggests", async (req, res) => {
+    const posts = await Posts.findAll({
+        attributes: ['title', 'postText', 'username']
+    });
+
+    // Post各キーの要素を入れた配列生成
+    const titleArray = [];
+    const textArray = [];
+    const userArray = [];
+    posts.map((post) => {
+        titleArray.push(post.title);
+        textArray.push(post.postText);
+        userArray.push(post.username);
+    });
+    // 3つの配列を結合してtitle/postText/usernameキーの要素が入った配列生成
+    const titleAndTextArr = titleArray.concat(textArray);
+    let duplicatedSuggests = titleAndTextArr.concat(userArray);
+    // 配列から重複した要素を削除
+    let set = new Set(duplicatedSuggests);
+    let suggestions = Array.from(set);
+
+    res.json(suggestions);
+});
+
 router.post("/", validation, async (req, res) => {
     // title, postText
     const data = req.body;
