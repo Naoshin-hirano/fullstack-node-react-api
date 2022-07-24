@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        imageName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
     })
 
     Posts.associate = (models) => {
@@ -20,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             // post(1)を削除したらそのコメントも全て削除される
             onDelete: "cascade",
         });
-        
+
         Posts.hasMany(models.Likes, {
             // post(1)を削除したらそのLikesも全て削除される
             onDelete: "cascade",

@@ -1,5 +1,6 @@
 const express = require("express");
 const { Op } = require("sequelize");
+const multer = require("multer");
 const router = express.Router();
 const { Posts, Likes, Tags, PostTag } = require("../models");
 const { validation } = require("../middlewares/AuthMiddleware");
@@ -92,17 +93,38 @@ router.get("/suggests", async (req, res) => {
     res.json(suggestions);
 });
 
-router.post("/", validation, async (req, res) => {
+// multerで画像ファイルアップロード
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        // 画像ファイルを保存するディレクトリPath
+        callback(null, '../client/public/images');
+    },
+    filename: (req, file, callback) => {
+        // どういうファイル名で保存するか
+        callback(null, Date.now() + '--' + file.originalname);
+    }
+})
+const upload = multer({
+    storage: storage
+});
+
+router.post("/", validation, upload.single('file'), async (req, res) => {
     // title, postText
     const data = req.body;
-    const tags = data.checked;
+    // JSON.stringifyで文字列へ変換した配列を通常の配列に戻す
+    const tags = JSON.parse(data.checked);
+
+    if (!req.file) {
+        return res.json({ error: "ファイルのアップロードがされていません" });
+    }
+
     const post = {
         title: data.title,
         postText: data.postText,
         username: req.user.username,
-        UserId: req.user.id
+        UserId: req.user.id,
+        imageName: `images/${req.file.filename}`
     };
-
     // 新規タグを追加した場合
     // 新規タグのtagNameが既存タグのtagNameと被っていないか
     const existTag = await Tags.findOne({ where: { tag_name: data.tagName } });
