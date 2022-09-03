@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        imageName: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
     });
 
     Users.associate = (models) => {
@@ -23,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: "cascade",
             foreignKey: 'followed'
         });
-        
+
         Users.hasMany(models.Relationships, {
             onDelete: "cascade",
             foreignKey: 'following'
