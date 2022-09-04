@@ -24,13 +24,16 @@ router.get("/byId/:id", async (req, res) => {
 // Profile画面のUserが投稿したPost一覧
 router.get("/byuserId/:id", async (req, res) => {
     const uid = req.params.id;
-    const listOfPosts = await Posts.findAll({ where: { UserId: uid }, include: [Likes, Tags] });
+    const listOfPosts = await Posts.findAll({
+        where: { UserId: uid },
+        include: [Likes, Tags],
+    });
     res.json(listOfPosts);
 });
 
 // タグで絞り込んだPost一覧
 router.get("/byhashtag/:id", validation, async (req, res) => {
-    const posts = await Posts.findAll({ include: [Tags, Likes] })
+    const posts = await Posts.findAll({ include: [Tags, Likes] });
     const tagName = req.params.id;
 
     // Post一覧をループして、その中のTag一覧をさらにループして、リクエストのあったtag_nameと一致する名前のTagを持つPost一覧を取得
@@ -40,7 +43,7 @@ router.get("/byhashtag/:id", validation, async (req, res) => {
             if (posts[i].Tags[f].tag_name != tagName) continue;
             tagPosts.push(posts[i]);
         }
-    };
+    }
 
     // 自分がいいねしたPostだけを抜き出す
     const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
@@ -60,9 +63,9 @@ router.get("/search/:id", validation, async (req, res) => {
                 { title: { [Op.like]: `%${keyword}%` } },
                 { postText: { [Op.like]: `%${keyword}%` } },
                 { username: { [Op.like]: `%${keyword}%` } },
-            ]
+            ],
         },
-        include: [Likes, Tags]
+        include: [Likes, Tags],
     });
 
     res.json({ searchPosts: posts, likedPosts: likedPosts });
@@ -71,7 +74,7 @@ router.get("/search/:id", validation, async (req, res) => {
 // 検索窓でのオートサジェスト一覧
 router.get("/suggests", async (req, res) => {
     const posts = await Posts.findAll({
-        attributes: ['title', 'postText', 'username']
+        attributes: ["title", "postText", "username"],
     });
 
     // Post各キーの要素を入れた配列生成
@@ -97,18 +100,18 @@ router.get("/suggests", async (req, res) => {
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         // 画像ファイルを保存するディレクトリPath
-        callback(null, '../client/public/images');
+        callback(null, "../client/public/images");
     },
     filename: (req, file, callback) => {
         // どういうファイル名で保存するか
-        callback(null, Date.now() + '--' + file.originalname);
-    }
-})
+        callback(null, Date.now() + "--" + file.originalname);
+    },
+});
 const upload = multer({
-    storage: storage
+    storage: storage,
 });
 
-router.post("/", validation, upload.single('file'), async (req, res) => {
+router.post("/", validation, upload.single("file"), async (req, res) => {
     // title, postText
     const data = req.body;
     // JSON.stringifyで文字列へ変換した配列を通常の配列に戻す
@@ -123,7 +126,7 @@ router.post("/", validation, upload.single('file'), async (req, res) => {
         postText: data.postText,
         username: req.user.username,
         UserId: req.user.id,
-        imageName: `images/${req.file.filename}`
+        imageName: `images/${req.file.filename}`,
     };
     // 新規タグを追加した場合
     // 新規タグのtagNameが既存タグのtagNameと被っていないか
@@ -137,16 +140,18 @@ router.post("/", validation, upload.single('file'), async (req, res) => {
         await PostTag.create({ PostId: insertPost.id, TagId: insertTag.id });
     } else {
         return res.json({ error: "NewTag名がすでに存在しているタグ名です" });
-    };
+    }
 
     // 既存タグをこの投稿に追加した場合
     if (tags.length > 0) {
         tags.forEach(async (tag) => {
-            const foundPost = await Posts.findOne({ where: { title: data.title } });
+            const foundPost = await Posts.findOne({
+                where: { title: data.title },
+            });
             const foundTag = await Tags.findOne({ where: { tag_name: tag } });
             PostTag.create({ PostId: foundPost.id, TagId: foundTag.id });
         });
-    };
+    }
 
     res.json(post);
 });
@@ -170,8 +175,8 @@ router.delete("/:postId", validation, async (req, res) => {
     // DELETE FROM Comments WHERE id=?;
     await Posts.destroy({
         where: {
-            id: postId
-        }
+            id: postId,
+        },
     });
 
     // フロント側で.then()内の処理を実行するためにどうでもいい内容のレスポンスをあえて作ってる

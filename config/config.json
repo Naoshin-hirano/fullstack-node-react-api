@@ -1,23 +1,23 @@
 {
-  "development": {
-    "username": "root",
-    "password": "Naoyakun1!",
-    "database": "fullstack_app",
-    "host": "localhost",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "b1bfcbcc93a2d6",
-    "password": "a6c95dde",
-    "database": "heroku_956fec209b48eda",
-    "host": "us-cdbr-east-06.cleardb.net",
-    "dialect": "mysql"
-  }
+    "development": {
+        "username": "root",
+        "password": "Naoyakun1!",
+        "database": "fullstack_app",
+        "host": "localhost",
+        "dialect": "mysql"
+    },
+    "test": {
+        "username": "root",
+        "password": null,
+        "database": "database_test",
+        "host": "127.0.0.1",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "b1bfcbcc93a2d6",
+        "password": "a6c95dde",
+        "database": "heroku_956fec209b48eda",
+        "host": "us-cdbr-east-06.cleardb.net",
+        "dialect": "mysql"
+    }
 }

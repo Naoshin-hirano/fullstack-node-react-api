@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {Comments} = require("../models");
+const { Comments } = require("../models");
 const { validation } = require("../middlewares/AuthMiddleware");
 
 router.get("/:postId", async (req, res) => {
@@ -27,8 +27,8 @@ router.delete("/:commentId", validation, async (req, res) => {
     // DELETE FROM Comments WHERE id=?;
     await Comments.destroy({
         where: {
-            id: commentdId
-        }
+            id: commentdId,
+        },
     });
 
     // フロント側で.then()内の処理を実行するためにどうでもいい内容のレスポンスをあえて作ってる

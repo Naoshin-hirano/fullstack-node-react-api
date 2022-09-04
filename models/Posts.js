@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         imageName: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
-    })
+    });
 
     Posts.associate = (models) => {
         // 1:多 のテーブル関係
@@ -31,9 +31,9 @@ module.exports = (sequelize, DataTypes) => {
         });
 
         Posts.belongsToMany(models.Tags, {
-            through: "PostTag"
+            through: "PostTag",
         });
-    }
+    };
 
     return Posts;
 };

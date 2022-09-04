@@ -3,9 +3,10 @@ const { verify } = require("jsonwebtoken");
 // ログインしているかチェック
 const validation = (req, res, next) => {
     // header: commentをpostするときにaxiosから送るheaderオブジェクト
-    const accessToken = req.header("accessToken")
+    const accessToken = req.header("accessToken");
 
-    if (!accessToken) return res.json({ error: "ユーザーはログインしてません" });
+    if (!accessToken)
+        return res.json({ error: "ユーザーはログインしてません" });
 
     try {
         // accessTokenを"importantsecret"という秘密鍵で復号

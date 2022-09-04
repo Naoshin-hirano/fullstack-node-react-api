@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         imageName: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: true,
         },
     });
 
@@ -25,15 +25,14 @@ module.exports = (sequelize, DataTypes) => {
 
         Users.hasMany(models.Relationships, {
             onDelete: "cascade",
-            foreignKey: 'followed'
+            foreignKey: "followed",
         });
 
         Users.hasMany(models.Relationships, {
             onDelete: "cascade",
-            foreignKey: 'following'
+            foreignKey: "following",
         });
-
-    }
+    };
 
     return Users;
 };
