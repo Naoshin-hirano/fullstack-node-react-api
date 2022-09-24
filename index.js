@@ -30,6 +30,9 @@ app.use("/relationships", Relationships);
 const Tags = require("./routes/Tags");
 app.use("/tags", Tags);
 
+const DirectMessages = require("./routes/DirectMessages");
+app.use("/directmessages", DirectMessages);
+
 db.sequelize.sync().then(() => {
     app.listen(process.env.PORT || 3001, () => {
         console.log("running on port 3001");

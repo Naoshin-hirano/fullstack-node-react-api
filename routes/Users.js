@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Users, Relationships } = require("../models");
+const { Users, Relationships, DirectMessages } = require("../models");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const { validation } = require("../middlewares/AuthMiddleware");
@@ -71,6 +71,13 @@ router.get("/basicInfo/:id", async (req, res) => {
     });
 
     res.json({ basicInfo: basicInfo, following: followingUsers });
+});
+
+// DMのUser情報を取得
+router.get("/dmUser/:id", async (req, res) => {
+    const id = req.params.id;
+    const dmUserInfo = await Users.findByPk(id);
+    res.json(dmUserInfo);
 });
 
 router.put("/changepassword", validation, async (req, res) => {

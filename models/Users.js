@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: "cascade",
         });
 
+        Users.hasMany(models.DirectMessages, {
+            onDelete: "cascade",
+        });
+
         Users.hasMany(models.Relationships, {
             onDelete: "cascade",
             foreignKey: "followed",
