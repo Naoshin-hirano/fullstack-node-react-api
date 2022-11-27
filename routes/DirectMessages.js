@@ -12,7 +12,8 @@ router.post("/", validation, async (req, res) => {
     const data = req.body;
     const postObj = {
         text: data.text,
-        UserId: req.user.id,
+        UserId: data.UserId,
+        toUserId: data.toUserId,
     };
     const directMessages = await DirectMessages.create(postObj);
     res.json(directMessages);

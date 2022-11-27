@@ -3,6 +3,9 @@ module.exports = (sequelize, DataTypes) => {
         text: {
             type: DataTypes.STRING,
         },
+        toUserId: {
+            type: DataTypes.INTEGER,
+        },
     });
 
     return DirectMessages;
