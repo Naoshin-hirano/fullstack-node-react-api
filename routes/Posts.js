@@ -2,6 +2,7 @@ const express = require("express");
 const { Op } = require("sequelize");
 const multer = require("multer");
 const router = express.Router();
+const cloudinary = require("../utils/cloudinary");
 const { Posts, Likes, Tags, PostTag } = require("../models");
 const { validation } = require("../middlewares/AuthMiddleware");
 
@@ -112,6 +113,8 @@ const upload = multer({
 });
 
 router.post("/", validation, upload.single("file"), async (req, res) => {
+    // Upload image to cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path);
     // title, postText
     const data = req.body;
     // JSON.stringifyで文字列へ変換した配列を通常の配列に戻す
@@ -126,7 +129,8 @@ router.post("/", validation, upload.single("file"), async (req, res) => {
         postText: data.postText,
         username: req.user.username,
         UserId: req.user.id,
-        imageName: `images/${req.file.filename}`,
+        imageName: result.secure_url,
+        cloudinary_id: result.public_id,
     };
     // 新規タグを追加した場合
     // 新規タグのtagNameが既存タグのtagNameと被っていないか

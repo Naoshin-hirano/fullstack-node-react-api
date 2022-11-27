@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const { validation } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
+const cloudinary = require("../utils/cloudinary");
 
 // Registration
 router.post("/", async (req, res) => {
@@ -120,6 +121,8 @@ router.put(
     validation,
     upload.single("file"),
     async (req, res) => {
+        // Upload image to cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path);
         console.log(req);
         if (!req.file) {
             return res.json({
@@ -127,11 +130,11 @@ router.put(
             });
         }
         await Users.update(
-            { imageName: `images/${req.file.filename}` },
+            { imageName: result.secure_url },
             { where: { id: req.user.id } }
         );
 
-        res.json({ imageName: `images/${req.file.filename}` });
+        res.json({ imageName: result.secure_url });
     }
 );
 
