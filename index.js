@@ -5,13 +5,7 @@ require("dotenv").config();
 const app = express();
 const db = require("./models");
 
-app.use(
-    cors({
-        origin: "http://localhost:3000", //アクセス許可するオリジン
-        credentials: true, //レスポンスヘッダーにAccess-Control-Allow-Credentials追加
-        optionsSuccessStatus: 200, //レスポンスstatusを200に設定
-    })
-);
+app.use(cors());
 
 // クライアントから送信されたデータを、 req.body 経由で会得、操作できる。Body-Parser を基にExpressに組み込まれた機能、
 app.use(express.json());
