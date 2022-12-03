@@ -6,11 +6,12 @@ const app = express();
 const db = require("./models");
 
 app.use(
-    // cors({
-    //     origin: process.env.BASE_URL,
-    //     optionsSuccessStatus: 200,
-    // })
-    cors()
+    cors({
+        origin: "*",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: true,
+        optionsSuccessStatus: 204,
+    })
 );
 // クライアントから送信されたデータを、 req.body 経由で会得、操作できる。Body-Parser を基にExpressに組み込まれた機能、
 app.use(express.json());
