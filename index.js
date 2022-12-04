@@ -6,6 +6,7 @@ const app = express();
 const db = require("./models");
 
 app.use(cors());
+app.options("*", cors());
 
 // app.use(
 //     cors({
