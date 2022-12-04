@@ -15,7 +15,7 @@ const db = require("./models");
 app.use(
     cors({
         origin: "*",
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
         preflightContinue: true,
         optionsSuccessStatus: 204,
         credentials: true,
