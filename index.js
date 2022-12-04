@@ -1,12 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+// const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const db = require("./models");
 
-app.use(cors());
-app.options("*", cors());
+app.options("*", (req, res) => {
+    res.writeHead(200, "", {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS",
+    }).end();
+});
 
 // app.use(
 //     cors({
