@@ -1,25 +1,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const cors = require("cors");
+const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const db = require("./models");
 
-app.options("*", (req, res) => {
-    res.writeHead(200, "", {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS",
-    }).end();
-});
+// app.options("*", (req, res) => {
+//     res.writeHead(200, "", {
+//         "Access-Control-Allow-Origin": "*",
+//         "Access-Control-Allow-Methods": "OPTIONS",
+//     }).end();
+// });
 
-// app.use(
-//     cors({
-//         origin: "*",
-//         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//         preflightContinue: true,
-//         optionsSuccessStatus: 204,
-//     })
-// );
+app.use(
+    cors({
+        origin: "*",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: true,
+        optionsSuccessStatus: 204,
+        credentials: true,
+    })
+);
 
 // const allowCrossDomain = function (req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
@@ -36,8 +37,7 @@ app.options("*", (req, res) => {
 //         next();
 //     }
 // };
-
-app.use(allowCrossDomain);
+// app.use(allowCrossDomain);
 // クライアントから送信されたデータを、 req.body 経由で会得、操作できる。Body-Parser を基にExpressに組み込まれた機能、
 app.use(express.json());
 // Content-Type が application/x-www-form-urlencoded である POST リクエストのボディ部を解析し、 リクエストオブジェクトの body プロパティにフォームデータの内容を表すオブジェクトをセット
