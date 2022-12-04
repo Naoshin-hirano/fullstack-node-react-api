@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const cors = require("cors");
+const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const db = require("./models");
+
+app.use(cors());
 
 // app.use(
 //     cors({
@@ -14,21 +16,21 @@ const db = require("./models");
 //     })
 // );
 
-const allowCrossDomain = function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization, accessToken"
-    );
+// const allowCrossDomain = function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+//     res.header(
+//         "Access-Control-Allow-Headers",
+//         "Content-Type, Authorization, accessToken"
+//     );
 
-    // intercept OPTIONS method
-    if ("OPTIONS" === req.method) {
-        res.send(200);
-    } else {
-        next();
-    }
-};
+//     // intercept OPTIONS method
+//     if ("OPTIONS" === req.method) {
+//         res.send(200);
+//     } else {
+//         next();
+//     }
+// };
 
 app.use(allowCrossDomain);
 // クライアントから送信されたデータを、 req.body 経由で会得、操作できる。Body-Parser を基にExpressに組み込まれた機能、
