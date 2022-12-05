@@ -64,11 +64,16 @@ app.use("/tags", Tags);
 const DirectMessages = require("./routes/DirectMessages");
 app.use("/directmessages", DirectMessages);
 
-db.sequelize.sync().then(() => {
-    app.listen(process.env.PORT || 3001, () => {
-        console.log("running on port 3001");
+db.sequelize
+    .sync()
+    .then(() => {
+        app.listen(process.env.PORT || 3001, () => {
+            console.log("running on port 3001");
+        });
+    })
+    .catch((err) => {
+        console.log("err", err);
     });
-});
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
