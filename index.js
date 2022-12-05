@@ -69,3 +69,8 @@ db.sequelize.sync().then(() => {
         console.log("running on port 3001");
     });
 });
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("Something broke!");
+});
