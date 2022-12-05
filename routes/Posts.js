@@ -7,12 +7,18 @@ const { Posts, Likes, Tags, PostTag } = require("../models");
 const { validation } = require("../middlewares/AuthMiddleware");
 
 router.get("/", validation, async (req, res) => {
-    // SELECT * FROM Posts;
-    // Postsだけでなくその中のLikesオブジェクトの配列も取得
-    const listOfPosts = await Posts.findAll({ include: [Likes, Tags] });
-    // 自分がいいねしたPostだけを抜き出す
-    const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
-    res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
+    try {
+        // SELECT * FROM Posts;
+        // Postsだけでなくその中のLikesオブジェクトの配列も取得
+        const listOfPosts = await Posts.findAll({ include: [Likes, Tags] });
+        // 自分がいいねしたPostだけを抜き出す
+        const likedPosts = await Likes.findAll({
+            where: { UserId: req.user.id },
+        });
+        res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 router.get("/byId/:id", async (req, res) => {
