@@ -1,9 +1,8 @@
 const express = require("express");
 const { Op } = require("sequelize");
-const multer = require("multer");
 const router = express.Router();
 const cloudinary = require("../utils/cloudinary");
-const path = require("path");
+const upload = require("../utils/multer");
 const { Posts, Likes, Tags, PostTag } = require("../models");
 const { validation } = require("../middlewares/AuthMiddleware");
 
@@ -102,29 +101,6 @@ router.get("/suggests", async (req, res) => {
     let suggestions = Array.from(set);
 
     res.json(suggestions);
-});
-
-// multerで画像ファイルアップロード
-const storage = multer.diskStorage({
-    // destination: (req, file, callback) => {
-    //     // 画像ファイルを保存するディレクトリPath
-    //     callback(null, "../client/public/images");
-    // },
-    // filename: (req, file, callback) => {
-    //     // どういうファイル名で保存するか
-    //     callback(null, Date.now() + "--" + file.originalname);
-    // },
-});
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        let ext = path.extname(file.originalname);
-        if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
-            cb(new Error("File type is not supported"), false);
-            return;
-        }
-        cb(null, true);
-    },
 });
 
 router.post("/", validation, upload.single("file"), async (req, res) => {

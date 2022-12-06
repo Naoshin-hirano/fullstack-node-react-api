@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { Users, Relationships, DirectMessages } = require("../models");
+const { Users, Relationships } = require("../models");
 const bcrypt = require("bcryptjs");
-const multer = require("multer");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
 const { validation } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
-const cloudinary = require("../utils/cloudinary");
 
 // Registration
 router.post("/", async (req, res) => {
@@ -99,21 +99,6 @@ router.put("/changepassword", validation, async (req, res) => {
             res.json("SUCCESS");
         });
     });
-});
-
-// multerで画像ファイルアップロード
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        // 画像ファイルを保存するディレクトリPath
-        callback(null, "../client/public/images");
-    },
-    filename: (req, file, callback) => {
-        // どういうファイル名で保存するか
-        callback(null, Date.now() + "--" + file.originalname);
-    },
-});
-const upload = multer({
-    storage: storage,
 });
 
 router.put(
