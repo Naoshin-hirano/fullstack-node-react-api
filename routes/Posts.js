@@ -118,7 +118,7 @@ const upload = multer({
     storage: storage,
 });
 
-router.post("/", validation, upload.single("file"), async (req, res) => {
+router.post("/", validation, async (req, res) => {
     // Upload image to cloudinary
     // const result = await cloudinary.uploader.upload(req.file.path);
     // title, postText
