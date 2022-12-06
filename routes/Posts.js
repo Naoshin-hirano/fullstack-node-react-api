@@ -118,25 +118,25 @@ const upload = multer({
     storage: storage,
 });
 
-router.post("/", validation, async (req, res) => {
+router.post("/", validation, upload.single("file"), async (req, res) => {
     // Upload image to cloudinary
-    // const result = await cloudinary.uploader.upload(req.file.path);
+    const result = await cloudinary.uploader.upload(req.file.path);
     // title, postText
     const data = req.body;
     // JSON.stringifyで文字列へ変換した配列を通常の配列に戻す
-    // const tags = JSON.parse(data.checked);
-    const tags = data.checked;
+    const tags = JSON.parse(data.checked);
 
-    // if (!req.file) {
-    //     return res.json({ error: "ファイルのアップロードがされていません" });
-    // }
+    if (!req.file) {
+        return res.json({ error: "ファイルのアップロードがされていません" });
+    }
 
     const post = {
         title: data.title,
         postText: data.postText,
         username: req.user.username,
         UserId: req.user.id,
-        imageName: "",
+        imageName: result.secure_url,
+        cloudinary_id: result.public_id,
     };
     // 新規タグを追加した場合
     // 新規タグのtagNameが既存タグのtagNameと被っていないか
