@@ -120,7 +120,7 @@ const upload = multer({
 
 router.post("/", validation, upload.single("file"), async (req, res) => {
     // Upload image to cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
+    // const result = await cloudinary.uploader.upload(req.file.path);
     // title, postText
     const data = req.body;
     // JSON.stringifyで文字列へ変換した配列を通常の配列に戻す
@@ -135,8 +135,7 @@ router.post("/", validation, upload.single("file"), async (req, res) => {
         postText: data.postText,
         username: req.user.username,
         UserId: req.user.id,
-        imageName: result.secure_url,
-        cloudinary_id: result.public_id,
+        imageName: "",
     };
     // 新規タグを追加した場合
     // 新規タグのtagNameが既存タグのtagNameと被っていないか
