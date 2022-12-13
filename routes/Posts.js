@@ -151,18 +151,15 @@ router.post("/", validation, upload.single("file"), async (req, res) => {
     res.json(post);
 });
 
-router.put("/title", validation, async (req, res) => {
-    const { newTitle, id } = req.body;
-    // UPDATE Posts SET title=newTitle WHERE id=id;
-    await Posts.update({ title: newTitle }, { where: { id: id } });
-    res.json(newTitle);
-});
-
-router.put("/postText", validation, async (req, res) => {
-    const { newPostText, id } = req.body;
-    // UPDATE Posts SET title=newPostText WHERE id=id;
-    await Posts.update({ postText: newPostText }, { where: { id: id } });
-    res.json(newPostText);
+router.put("/edit", validation, async (req, res) => {
+    const { newTitle, newPostText, id } = req.body;
+    // UPDATE Posts SET title=newTitle AND postText=newPostText WHERE id=id;
+    await Posts.update(
+        { title: newTitle, postText: newPostText },
+        { where: { id: id } }
+    );
+    const newPost = await Posts.findOne({ where: { id: id } });
+    res.json(newPost);
 });
 
 router.delete("/:postId", validation, async (req, res) => {
