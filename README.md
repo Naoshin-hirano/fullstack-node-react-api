@@ -2,7 +2,7 @@
 
 
 SNSで頻繁に使用される機能を詰め込んだSPAでの投稿アプリ<br/>
-URL: https://iridescent-pasca-92f793.netlify.app/<br>
+URL: https://react-typescript-express-sns-app.netlify.app<br>
 フロント側レポジトリ：　　https://github.com/Naoshin-hirano/fullstack-node-react-front
 
 
