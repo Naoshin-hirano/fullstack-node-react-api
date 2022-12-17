@@ -19,7 +19,10 @@ router.post("/", validation, async (req, res) => {
     // Commentsカラムのusernameへ代入
     comment.username = username;
     await Comments.create(comment);
-    res.json(comment);
+    const newComment = await Comments.findOne({
+        where: { commentBody: comment.commentBody },
+    });
+    res.json(newComment);
 });
 
 router.delete("/:commentId", validation, async (req, res) => {
