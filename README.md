@@ -14,7 +14,7 @@ URL: https://react-typescript-express-sns-app.netlify.app<br>
 
 
 
-<h4>レスポンシブデザイン</h1>
+<h4>◆レスポンシブデザイン</h1>
 
 ![レスポンシブ](https://user-images.githubusercontent.com/59371503/208230029-db056d1d-808f-4bbe-9eff-132a4f616efb.gif)
 
