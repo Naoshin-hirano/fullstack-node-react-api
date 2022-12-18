@@ -14,8 +14,10 @@ router.post("/", async (req, res) => {
         Users.create({
             username: username,
             password: hash,
+            imageName:
+                "https://res.cloudinary.com/dq8na8c7e/image/upload/v1671264511/98D3B03A-54B3-4976-818A-81F24F0BDD27_dm5vid.jpg",
         });
-        res.json("SUCCESS");
+        res.json("ユーザー新規登録完了しました");
     });
 });
 
@@ -107,6 +109,7 @@ router.put(
     upload.single("file"),
     async (req, res) => {
         // Upload image to cloudinary
+        console.log("file", res.file);
         const result = await cloudinary.uploader.upload(req.file.path);
         console.log(req);
         if (!req.file) {
