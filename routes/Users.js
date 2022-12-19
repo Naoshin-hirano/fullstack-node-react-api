@@ -7,6 +7,19 @@ const upload = require("../utils/multer");
 const { validation } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
 
+// Guest
+router.get("/guest", async (req, res) => {
+    bcrypt.hash("Guest1120!", 10).then(async (hash) => {
+        await Users.update(
+            {
+                password: hash,
+            },
+            { where: { username: "GuestUser" } }
+        );
+        return res.json("ユーザー更新完了しました");
+    });
+});
+
 // Registration
 router.post("/", async (req, res) => {
     const { username, password } = req.body;
@@ -17,7 +30,7 @@ router.post("/", async (req, res) => {
             imageName:
                 "https://res.cloudinary.com/dq8na8c7e/image/upload/v1671264511/98D3B03A-54B3-4976-818A-81F24F0BDD27_dm5vid.jpg",
         });
-        res.json("ユーザー新規登録完了しました");
+        return res.json("ユーザー新規登録完了しました");
     });
 });
 
