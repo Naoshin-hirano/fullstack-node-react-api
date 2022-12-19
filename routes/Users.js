@@ -25,10 +25,11 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const user = await Users.findOne({ where: { username: username } });
-    if (!user) res.json({ error: "Userが存在しません" });
+    if (!user) return res.json({ error: "Userが存在しません" });
 
     bcrypt.compare(password, user.password).then((match) => {
-        if (!match) res.json({ error: "UsernameとPasswordが合致しません" });
+        if (!match)
+            return res.json({ error: "UsernameとPasswordが合致しません" });
         // "importantsecret"という秘密鍵でJWTを発行
         const accessToken = sign(
             { username: username, password: password, id: user.id },
