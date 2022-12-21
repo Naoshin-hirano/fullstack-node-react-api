@@ -66,15 +66,11 @@ router.get("/auth", validation, async (req, res) => {
     res.json(user);
 });
 
-router.get("/basicInfo/:id", async (req, res) => {
+router.get("/userBasicInfo/:id", async (req, res) => {
     const id = req.params.id;
     // 画面Userのpassword意外のカラム
-    // 画面UserがフォローしているUser一覧
-    const basicInfo = await Users.findByPk(id, {
+    const userBasicInfo = await Users.findByPk(id, {
         attributes: { exclude: ["password"] },
-        include: {
-            model: Relationships,
-        },
     });
 
     // 画面のUserをフォローしているUser一覧
@@ -87,7 +83,21 @@ router.get("/basicInfo/:id", async (req, res) => {
         },
     });
 
-    res.json({ basicInfo: basicInfo, following: followingUsers });
+    // 画面UserがフォローしているUser一覧
+    const followedUsers = await Users.findAll({
+        include: {
+            model: Relationships,
+            where: {
+                following: id,
+            },
+        },
+    });
+
+    res.json({
+        userBasicInfo: userBasicInfo,
+        following: followingUsers,
+        followed: followedUsers,
+    });
 });
 
 // DMのUser情報を取得
